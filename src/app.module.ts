@@ -7,9 +7,13 @@ import { OrderModule } from './order/order.module';
 import { PaymentsModule } from './payments/payments.module';
 import { WalletModule } from './wallet/wallet.module';
 import { ServicesModule } from './services/services.module';
+import { configService } from './config/config.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CollegeModule } from './college/college.module';
 
 @Module({
-  imports: [UserModule, VendorModule, OrderModule, PaymentsModule, WalletModule, ServicesModule],
+  
+  imports: [UserModule, VendorModule, OrderModule, PaymentsModule, WalletModule, ServicesModule,TypeOrmModule.forRoot(configService.getTypeOrmConfig()), CollegeModule],
   controllers: [AppController],
   providers: [AppService],
 })

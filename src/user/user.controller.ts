@@ -8,27 +8,27 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
   
   @Post()
-  signUp(@Body() createUserDto: any) {
-    return this.userService.create(createUserDto);
+  async createUser(@Body() createUserDto: any) {
+    return await this.userService.create(createUserDto);
   }
+
+  @Post()
+  async loginUser()  {
+    return await this.userService.findAll();
+  }
+  
+  @Post()
+  async generateOtp(){
+     
+  }
+
+  @Post()
+  async verifyOtp(){}
 
   @Get()
-  login() {
-    return this.userService.findAll();
-  }
+  async getUserReferrals(){}
 
-  @Get(':id')
-  getUserDetails(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
+  
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
 }
