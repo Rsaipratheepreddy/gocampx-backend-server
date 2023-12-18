@@ -31,16 +31,13 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsString()
-    collegeName: string
+    collegeId: string
 
     @IsNotEmpty()
     @IsString()
     referralId: string
-
-    @IsNotEmpty()
+    
     @IsString()
     referredBy: string
-
-    
     
 }

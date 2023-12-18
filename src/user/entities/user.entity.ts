@@ -2,7 +2,7 @@ import { PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, Ent
 
 
 @Entity()
-export abstract class User {
+export class User {
    @PrimaryGeneratedColumn('uuid')
    id: string;
    
@@ -25,7 +25,7 @@ export abstract class User {
     authType: string;
 
     @Column({})
-    collegeName: string;
+    collegeId: string;
 
     @Column({})
     referralId: string
