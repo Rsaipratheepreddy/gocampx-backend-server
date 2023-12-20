@@ -3,21 +3,21 @@ import { PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, Ent
 
 @Entity()
 export class College {
-   @PrimaryGeneratedColumn('uuid')
-   id: string;
-   
-   @Column({})
-   collegeName: string;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-   @Column({})
+    @Column({ name: "college_name" })
+    collegeName: string;
+
+    @Column({})
     address: string;
 
-   @Column({})
+    @Column({ name: "location_Url" })
     locationUrl: string;
 
-    @Column({})
-    createdAt: string;
+    @CreateDateColumn({ name: "created_at" })
+    createdAt: Date;
 
-    @Column({})
-    updatedAt: string;
+    @UpdateDateColumn({ name: "updated_at" })
+    updatedAt: Date;
 }

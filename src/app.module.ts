@@ -10,10 +10,11 @@ import { ServicesModule } from './services/services.module';
 import { configService } from './config/config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CollegeModule } from './college/college.module';
+import { WalletTransactionsModule } from './wallet-transactions/wallet-transactions.module';
 
 @Module({
   
-  imports: [UserModule, VendorModule, OrderModule, PaymentsModule, WalletModule, ServicesModule,TypeOrmModule.forRoot(configService.getTypeOrmConfig()), CollegeModule],
+  imports: [UserModule, VendorModule, OrderModule, PaymentsModule, WalletModule, ServicesModule,TypeOrmModule.forRoot(configService.getTypeOrmConfig()), CollegeModule, WalletTransactionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
