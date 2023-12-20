@@ -1,9 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { User } from '../user/entities/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { Payment } from '../payments/entities/payment.entity';
-import { Order } from '../order/entities/order.entity';
-import { CreateUserTable1702995246694 } from '../migrations/1702995246694-CreateUserTable';
 
 require('dotenv').config();
 
@@ -44,11 +40,11 @@ class ConfigService {
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DATABASE'),
 
-      entities: [User],
+      entities: [`${__dirname}/../**/entities/*.entity{.ts,.js}`],
 
       migrationsTableName: 'migration',
 
-      migrations: [CreateUserTable1702995246694],
+      migrations: [`${__dirname}/../migrations/*{.ts,.js}`],
 
       ssl: this.isProduction(),
     };

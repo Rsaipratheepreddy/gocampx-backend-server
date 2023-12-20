@@ -23,11 +23,11 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsEnum(['admin','user' ])
-    userType: string
+    authType: string
 
     @IsNotEmpty()
     @IsMobilePhone()
-    mobileNo: string
+    mobileNo: number
 
     @IsNotEmpty()
     @IsString()
