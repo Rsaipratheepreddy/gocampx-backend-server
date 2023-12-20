@@ -35,7 +35,7 @@ export class User {
     @Column({ name: "referral_id" })
     referralId: string
 
-    @Column({ name: "referred_by" })
+    @Column({ name: "referred_by", nullable: true })
     referredBy: string
 
     @CreateDateColumn({ name: "created_at" })

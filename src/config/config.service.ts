@@ -4,6 +4,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { Payment } from '../payments/entities/payment.entity';
 import { Order } from '../order/entities/order.entity';
 import { CreateUserTable1702995246694 } from '../migrations/1702995246694-CreateUserTable';
+import { ModifyUserTableColumn1703046019199 } from '../migrations/1703046019199-ModifyUserTableColumn';
 
 require('dotenv').config();
 
@@ -48,7 +49,7 @@ class ConfigService {
 
       migrationsTableName: 'migration',
 
-      migrations: [CreateUserTable1702995246694],
+      migrations: [CreateUserTable1702995246694, ModifyUserTableColumn1703046019199],
 
       ssl: this.isProduction(),
     };
