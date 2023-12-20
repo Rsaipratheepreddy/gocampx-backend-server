@@ -1,4 +1,4 @@
-import { Injectable, NotAcceptableException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotAcceptableException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -58,8 +58,9 @@ export class UserService {
   }
 
   TOdo
-  async loginUser(loginUserDto: LoginUserDto) {
-    const user = await this.validateUser(loginUserDto.userName, loginUserDto.password);
+  async loginUser(loginUserDto: LoginUserDto, email: string) {
+    const user = await this.validateUser(loginUserDto.userName, loginUserDto.password, email);
+
     if (user != null) {
       const { password, ...userWithoutPassword } = user;
       const payload = { ...userWithoutPassword };
@@ -89,7 +90,12 @@ export class UserService {
     return hashedData.slice(0, 6);
   }
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: string, password: string, email: string): Promise<any> {
+    if(email !=null){
+      const user = await this.userRepository.findOne({ where: { email: email } });
+      if(!user) throw new BadRequestException("User Not Found");
+      return user;
+    }
     const user = await this.userRepository.findOne({ where: { userName: username } });
     if (!user) return null;
     const passwordValid = await bcrypt.compare(password, user.password)
