@@ -7,6 +7,9 @@ class ConfigService {
 
   constructor(private env: { [k: string]: string | undefined }) { }
 
+
+
+
   private getValue(key: string, throwOnMissing = true): string {
     const value = this.env[key];
     if (!value && throwOnMissing) {
@@ -19,6 +22,19 @@ class ConfigService {
   public ensureValues(keys: string[]) {
     keys.forEach(k => this.getValue(k, true));
     return this;
+  }
+
+
+  public getGoogleClientId(): string {
+    return this.getValue('GOOGLE_CLIENT_ID', true);
+  }
+
+  public getGoogleClientSecret(): string {
+    return this.getValue('GOOGLE_CLIENT_SECRET', true);
+  }
+
+  public getGoogleCallbackURL(): string {
+    return this.getValue('GOOGLE_CALLBACK_URL', true);
   }
 
   public getPort() {
@@ -58,7 +74,12 @@ const configService = new ConfigService(process.env)
     'POSTGRES_PORT',
     'POSTGRES_USER',
     'POSTGRES_PASSWORD',
-    'POSTGRES_DATABASE'
+    'POSTGRES_DATABASE',
+    'GOOGLE_CLIENT_ID',
+    'GOOGLE_CLIENT_SECRET',
+    'GOOGLE_CALLBACK_URL',
+    'PORT',
+    'MODE',
   ]);
 
 export { configService };

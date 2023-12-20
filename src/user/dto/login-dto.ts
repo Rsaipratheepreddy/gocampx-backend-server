@@ -2,13 +2,10 @@ import { IsEmail, IsEnum, IsMobilePhone, IsNotEmpty, IsString } from "class-vali
 
 export class LoginUserDto {
     @IsString()
-    @IsNotEmpty()
     userName: string;
 
     @IsNotEmpty()
     @IsString()
     password: string;
 
-    
-    
 }
