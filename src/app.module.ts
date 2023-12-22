@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from "@nestjs/axios";
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -14,7 +15,7 @@ import { WalletTransactionsModule } from './wallet-transactions/wallet-transacti
 
 @Module({
   
-  imports: [UserModule, VendorModule, OrderModule, PaymentsModule, WalletModule, ServicesModule,TypeOrmModule.forRoot(configService.getTypeOrmConfig()), CollegeModule, WalletTransactionsModule],
+  imports: [UserModule, VendorModule, OrderModule, PaymentsModule, WalletModule, ServicesModule,TypeOrmModule.forRoot(configService.getTypeOrmConfig()), CollegeModule, WalletTransactionsModule, HttpModule],
   controllers: [AppController],
   providers: [AppService],
 })
