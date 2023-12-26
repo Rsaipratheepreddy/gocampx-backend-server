@@ -1,6 +1,7 @@
+import { Wallet } from '../../wallet/entities/wallet.entity';
 import { Order } from '../../order/entities/order.entity';
 import { Payment } from '../../payments/entities/payment.entity';
-import { PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, Entity, OneToMany } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, Entity, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 
 
 @Entity()
@@ -47,5 +48,8 @@ export class User {
     // @OneToMany(type => Payment, payment => payment.user) payments: Payment[];
 
     // @OneToMany(type => Order, order => order.user) orders: Order[];
+
+    @OneToOne(() => Wallet, (wallet) => wallet.user, { onDelete: 'CASCADE' })
+    wallet: Wallet
 
 }

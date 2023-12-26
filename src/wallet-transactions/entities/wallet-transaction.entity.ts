@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Wallet } from "../../wallet/entities/wallet.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({name:"wallet_transaction"})
+@Entity({ name: "wallet_transaction" })
 export class WalletTransaction {
 
     @PrimaryGeneratedColumn('uuid')
@@ -29,5 +30,9 @@ export class WalletTransaction {
 
     @UpdateDateColumn({ name: "updated_at" })
     updatedAt: Date;
+
+    @ManyToOne(type => Wallet, wallet => wallet.walletTransactions, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'wallet_id' })
+    wallet: Wallet;
 
 }
