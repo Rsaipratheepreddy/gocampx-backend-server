@@ -5,30 +5,25 @@ import { UpdateWalletDto } from './dto/update-wallet.dto';
 
 @Controller('wallet')
 export class WalletController {
-  constructor(private readonly walletService: WalletService) {}
+  constructor(private readonly walletService: WalletService) { }
 
-  @Post()
-  create(@Body() createWalletDto: CreateWalletDto) {
+  @Post("create")
+  createWallet(@Body() createWalletDto: CreateWalletDto) {
     return this.walletService.create(createWalletDto);
   }
 
-  @Get()
-  findAll() {
-    return this.walletService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.walletService.findOne(+id);
+  findWalletById(@Param('id') id: string) {
+    return this.walletService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
-    return this.walletService.update(+id, updateWalletDto);
+    return this.walletService.update(id, updateWalletDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.walletService.remove(+id);
+  @Get('convertCoinsToMoney/:id')
+  convertWalletCoinsToMoney(@Param('id') id: string) {
+    return this.walletService.convertWalletCoinsToMoney(id);
   }
 }

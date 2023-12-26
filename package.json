@@ -21,7 +21,8 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli",
     "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./src/config/config.service.ts",
     "typeorm:generate-migration": "npm run typeorm -- -d ./src/config/config.service.ts migration:generate",
-    "typeorm:create-migration": "npm run typeorm -- migration:create"
+    "typeorm:create-migration": "npm run typeorm -- migration:create",
+    "typeorm:revert-migrations": "npm run typeorm migration:revert -- -d ./src/config/config.service.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -31,6 +32,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.1.17",
     "@nestjs/typeorm": "^10.0.1",
     "axios": "^1.6.2",
     "bcrypt": "^5.1.1",
