@@ -50,7 +50,6 @@ export class WalletService {
         throw new Error("Bad request")
       }
     } catch (e) {
-      console.log(e)
       throw new HttpException('Error updating wallet', HttpStatus.BAD_REQUEST);
     }
   }

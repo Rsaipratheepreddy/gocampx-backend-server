@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotAcceptableException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotAcceptableException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -7,12 +7,19 @@ import * as bcrypt from 'bcrypt';
 import { createHash } from 'crypto';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-dto';
+import { HttpService } from '@nestjs/axios';
+import * as otpGenerator from 'otp-generator';
+import { Otp } from './entities/otp.entity';
+import { CreateOtpDto } from './dto/create-otp.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private jwtService: JwtService
+    @InjectRepository(Otp) private readonly otpRepository: Repository<Otp>,
+    private jwtService: JwtService,
+    private readonly httpService: HttpService,
   ) { }
 
 
@@ -91,9 +98,9 @@ export class UserService {
   }
 
   async validateUser(username: string, password: string, email: string): Promise<any> {
-    if(email !=null){
+    if (email != null) {
       const user = await this.userRepository.findOne({ where: { email: email } });
-      if(!user) throw new BadRequestException("User Not Found");
+      if (!user) throw new BadRequestException("User Not Found");
       return user;
     }
     const user = await this.userRepository.findOne({ where: { userName: username } });
@@ -108,8 +115,88 @@ export class UserService {
     return null;
   }
 
+  async sendOtp(createOtpDto: CreateOtpDto) {
+    try {
+      const userDetails = await this.userRepository.findOneBy({ id: createOtpDto.userId })
+      if (!userDetails) {
+        throw new NotFoundException('Could not find User');
+      }
+      const otpDetails = await this.otpRepository.findOneBy({ userId: createOtpDto.userId })
+      const otp = this.generateOtp()
+      if (!otpDetails) {
+        const otpObj = {
+          ...createOtpDto,
+          otp
+        }
+        await this.otpRepository.save(otpObj)
+      } else {
+        const otpObj = {
+          ...otpDetails,
+          otp
+        }
+        await this.otpRepository.update(otpDetails.id, otpObj)
+      }
+      const response = await this.sendOtpToUserMobile(otp, userDetails.mobileNo)
+      if (response.data.Success) {
+        return {
+          success: true,
+          message: "OTP sent successfully"
+        }
+      }
+      else {
+        return {
+          success: false,
+          message: "Failed to send OTP"
+        }
+      }
+    } catch (e) {
+      throw new HttpException("couldn't send Otp", e);
+    }
+  }
 
+  async verifyOtp(verifyOtpDTO: VerifyOtpDto) {
+    try {
+      const otpDetails = await this.otpRepository.findOneBy({ userId: verifyOtpDTO.userId })
+      if (otpDetails.otp == verifyOtpDTO.otp) {
+        const userDetails = await this.userRepository.findOneBy({ id: verifyOtpDTO.userId })
+        userDetails.isMobileVerified = true
+        await this.userRepository.update(userDetails.id, userDetails)
+        return {
+          success: true,
+          message: "OTP verified successfully"
+        }
+      } else {
+        return {
+          success: false,
+          message: "Incorrect OTP"
+        }
+      }
+    } catch (e) {
+      throw new HttpException("couldn't verify otp", e);
+    }
+  }
 
+  generateOtp() {
+    const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false })
+    return otp
+  }
 
+  async sendOtpToUserMobile(otp: number, mobileNo: number) {
+    const url = process.env.SMS_COUNTRY_URL
+    const body = {
+      "Text": `login OTP is ${otp} - ${process.env.SENDER_ID}`,
+      "Number": `91${mobileNo}`,
+      "SenderId": process.env.SENDER_ID,
+      "DRNotifyUrl": "https://www.domainname.com/notifyurl",
+      "DRNotifyHttpMethod": "POST",
+      "Tool": "API"
+    }
+    const bufferObj = Buffer.from(`${process.env.SMS_COUNTRY_AUTH_KEY}:${process.env.SMS_COUNTRY_AUTH_TOKEN}`, "utf8");
+    const base64String = bufferObj.toString("base64");
+    const headers = {
+      "Authorization": `Basic ${base64String}`
+    }
+    return await this.httpService.axiosRef.post(url, body, { headers });
+  }
 
 }
