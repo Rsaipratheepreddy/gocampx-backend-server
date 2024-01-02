@@ -1,5 +1,3 @@
-import { Order } from '../../order/entities/order.entity';
-import { Payment } from '../../payments/entities/payment.entity';
 import { PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, Entity, OneToMany } from 'typeorm';
 
 
@@ -8,7 +6,7 @@ export class Otp {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ name: "user_id" })
+    @Column({ name: "user_id", unique: true })
     userId: string;
 
     @Column({ name: "otp" })

@@ -39,6 +39,9 @@ export class User {
     @Column({ name: "referred_by", nullable: true })
     referredBy: string
 
+    @Column({ name: "is_mobile_verified", default: false })
+    isMobileVerified: boolean
+
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date;
 
