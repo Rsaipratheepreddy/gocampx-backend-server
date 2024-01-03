@@ -15,16 +15,16 @@ export class User {
     @Column({ name: "last_name" })
     lastName: string;
 
-    @Column({ name: "user_name" })
+    @Column({ name: "user_name", unique: true })
     userName: string;
 
     @Column()
     password: string;
 
-    @Column({ name: "mobile_no" })
+    @Column({ name: "mobile_no", unique: true })
     mobileNo: number;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
 
     @Column({ name: "auth_type" })
