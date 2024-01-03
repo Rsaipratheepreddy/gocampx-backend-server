@@ -12,6 +12,8 @@ import * as otpGenerator from 'otp-generator';
 import { Otp } from './entities/otp.entity';
 import { CreateOtpDto } from './dto/create-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class UserService {
@@ -45,10 +47,7 @@ export class UserService {
       user.referralId = referralId
       user.userName = createUserDto.userName
       user.mobileNo = createUserDto.mobileNo
-      // if (referredUser != null) {
-      //   user.referredBy = referredUser.id;
-      // }
-      // user.referredBy = referredUser.id;
+      user.referredBy = createUserDto.referredBy
 
       const registeredUser = this.userRepository.save(user);
 
@@ -197,6 +196,72 @@ export class UserService {
       "Authorization": `Basic ${base64String}`
     }
     return await this.httpService.axiosRef.post(url, body, { headers });
+  }
+
+  async findOne(id: string) {
+    const user = await this.userRepository.findOneBy({ id })
+    if (!user) {
+      throw new NotFoundException('Could not find user');
+    }
+    return {
+      success: true,
+      data: user
+    }
+  }
+
+  async findReferrals(id: string) {
+    const user = await this.userRepository.findOneBy({ id })
+    if (!user) {
+      throw new NotFoundException('Could not find user');
+    }
+    const referrals = await this.userRepository.find({ where: { referredBy: user.referralId } })
+    return {
+      success: true,
+      data: referrals
+    }
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    let user = await this.validateUser(resetPasswordDto.userName, resetPasswordDto.oldPassword, null);
+    if (user) {
+      const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+      user = {
+        ...user,
+        password: hashedPassword
+      }
+      user = await this.userRepository.update(user.id, user)
+      if (user) {
+        return {
+          success: true,
+          message: 'Password changed succesfully'
+        }
+      }
+
+    } else {
+      return {
+        success: false,
+        message: 'Invalid credentials'
+      }
+    }
+  }
+
+  async updatePassword(updatePasswordDto: UpdatePasswordDto) {
+
+    const userDetails = await this.userRepository.findOneBy({ id: updatePasswordDto.userId });
+    if (!userDetails) throw new BadRequestException("User Not Found");
+    const hashedPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
+    const user = await this.userRepository.update(updatePasswordDto.userId, { password: hashedPassword })
+    if (user) {
+      return {
+        success: true,
+        message: "password updated succesfully"
+      }
+    } else {
+      return {
+        success: false,
+        message: "couldn't update password"
+      }
+    }
   }
 
 }
