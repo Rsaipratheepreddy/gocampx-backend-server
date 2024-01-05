@@ -1,20 +1,16 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsString } from "class-validator";
 
-export class CreateCollegeDto {
+export class UpdateCollegeDto {
 
-    @IsNotEmpty()
     @IsString()
     collegeName: string;
 
-    @IsNotEmpty()
     @IsString()
     address: string;
 
-    @IsNotEmpty()
     @IsString()
     locationUrl: string;
 
-    @IsNotEmpty()
     @IsString()
     collegeCode: string;
 }
