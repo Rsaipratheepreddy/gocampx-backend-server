@@ -1,5 +1,7 @@
 import { User } from "../../user/entities/user.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BindingOrderDetailsDto } from "../dto/order-details.dto";
+import { BindingOrderPriceDetails } from "../dto/create-order.dto";
 
 @Entity()
 export class Order {
@@ -17,7 +19,7 @@ export class Order {
     paymentId: string;
 
     @Column({ name: "vendor_id" })
-    vendorId: string;
+    vendorId: string | number | object;
 
     @Column({ name: "order_status" })
     orderStatus: string;
@@ -25,8 +27,11 @@ export class Order {
     @Column({ name: "delivery_data" })
     deliveryDate: Date;
 
-    @Column({ name: "order_details", type:"jsonb" })
-    orderDetails: string;
+    @Column({ name: "order_details", type: 'jsonb', nullable: true })
+    orderDetails: BindingOrderDetailsDto[];
+
+    @Column({ name: "order-price-details", type: 'jsonb', nullable: true })
+    orderPriceDetails: any;
 
     @Column({ name: "order_otp" })
     orderOtp: string;
@@ -36,6 +41,4 @@ export class Order {
 
     @UpdateDateColumn({ name: "updated_at" })
     updatedAt: Date;
-
-    // @ManyToOne(type => User, user => user.orders) user: User;
 }
