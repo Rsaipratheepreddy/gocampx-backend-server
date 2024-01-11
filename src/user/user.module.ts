@@ -11,7 +11,7 @@ import { HttpModule } from '@nestjs/axios';
 @Module({
   imports: [TypeOrmModule.forFeature([User, Otp]), PassportModule, JwtModule.register({
     secret: 'gocampx-sai',
-    signOptions: { expiresIn: '30d' },
+    signOptions: { expiresIn: '1d' },
   }), HttpModule],
   controllers: [UserController],
   providers: [UserService],

@@ -49,13 +49,12 @@ export class UserService {
       user.mobileNo = createUserDto.mobileNo
       user.referredBy = createUserDto.referredBy
 
-      const registeredUser = this.userRepository.save(user);
+      const registeredUser = await this.userRepository.save(user);
 
       if (registeredUser != null) {
         return {
-          status: 0,
-          message: "success",
-          userData: registeredUser
+          success: true,
+          data: registeredUser
         }
       }
     } catch (error) {
@@ -63,15 +62,17 @@ export class UserService {
     }
   }
 
-  TOdo
+
   async loginUser(loginUserDto: LoginUserDto, email: string) {
     const user = await this.validateUser(loginUserDto.userName, loginUserDto.password, email);
 
     if (user != null) {
       const { password, ...userWithoutPassword } = user;
       const payload = { ...userWithoutPassword };
+      const access_token = await this.jwtService.signAsync(payload)
       return {
-        access_token: this.jwtService.sign(payload),
+        success: true,
+        data: { access_token }
       }
     }
   }
@@ -80,13 +81,13 @@ export class UserService {
     const user = await this.userRepository.findOne({ where: { userName: userName } })
     if (user != null) {
       return {
-        status: 1,
+        success: false,
         message: "user with this name already exists"
       }
     }
     return {
-      status: 0,
-      message: "available"
+      status: true,
+      message: "username available"
     }
   }
 
@@ -97,7 +98,7 @@ export class UserService {
   }
 
   async validateUser(username: string, password: string, email: string): Promise<any> {
-    if (email != null) {
+    if (email) {
       const user = await this.userRepository.findOne({ where: { email: email } });
       if (!user) throw new BadRequestException("User Not Found");
       return user;
