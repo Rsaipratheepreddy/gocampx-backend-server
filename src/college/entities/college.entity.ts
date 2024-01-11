@@ -6,13 +6,16 @@ export class College {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ name: "college_name" })
+    @Column({ name: "college_name", unique: true })
     collegeName: string;
 
-    @Column({})
+    @Column()
     address: string;
 
-    @Column({ name: "location_Url" })
+    @Column({ name: "college_code", unique: true })
+    collegeCode: string;
+
+    @Column({ name: "location_url" })
     locationUrl: string;
 
     @CreateDateColumn({ name: "created_at" })

@@ -1,5 +1,4 @@
 import { Controller, Post, Body, Req, Res, UseGuards, Get, BadRequestException, Param } from '@nestjs/common';
-import { Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-dto';
@@ -8,6 +7,7 @@ import { CreateOtpDto } from './dto/create-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { AuthGuard } from './guards/auth.gaurd';
 
 @Controller('user')
 export class UserController {
@@ -21,13 +21,13 @@ export class UserController {
   async auth() { }
 
 
-  @Post()
+  @Post("signUp")
   async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.userService.createUser(createUserDto);
   }
 
   @Post("login")
-  async loginUser(@Body() loginUserDto: LoginUserDto, @Req() req, @Res() res: Response) {
+  async loginUser(@Body() loginUserDto: LoginUserDto, @Req() req) {
     try {
 
       if (req.headers['authorization'] && req.headers['authorization'].startsWith('Bearer ')) {
@@ -36,7 +36,6 @@ export class UserController {
         return await this.userService.loginUser(loginUserDto, googleUser.email);
 
       }
-
       return await this.userService.loginUser(loginUserDto, "");
 
     } catch (e) {
@@ -54,11 +53,13 @@ export class UserController {
     return await this.userService.verifyOtp(verifyOtpDto)
   }
 
+  @UseGuards(AuthGuard)
   @Get('getUserReferrals/:id')
   async getUserReferrals(@Param('id') id: string) {
     return this.userService.findReferrals(id)
   }
 
+  @UseGuards(AuthGuard)
   @Get('get/:id')
   getUser(@Param('id') id: string) {
     return this.userService.findOne(id);
