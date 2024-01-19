@@ -120,15 +120,6 @@ export class OrderService {
     return updatedOrder;
   }
 
-  async getAllOrders() {
-    return await this.orderRepository.find();
-  }
-
-  async getOrderByServiceType(serviceId: string) {
-    const orders = await this.orderRepository.find({ where: { serviceId: serviceId } });
-    return
-  }
-
   async changeOrderStatus(orderStatus: OrderStatus, orderId: string) {
 
     const order = await this.orderRepository.findOne({ where: { id: orderId } });
@@ -167,17 +158,5 @@ export class OrderService {
       }
     }
     return {} as BindingOrderPriceDetails;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
-  }
-
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} order`;
   }
 }
