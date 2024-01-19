@@ -7,14 +7,14 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  @Post()
+  @Post("create")
   create(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
+    return this.orderService.createOrder(createOrderDto);
   }
 
   @Get()
   findAll() {
-    return this.orderService.findAll();
+    return this.orderService.getAllOrders();
   }
 
   @Get(':id')
