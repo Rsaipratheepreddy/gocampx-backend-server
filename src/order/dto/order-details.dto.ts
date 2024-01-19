@@ -40,10 +40,4 @@ export class BindingOrderDetailsDto {
     @IsOptional()
     @IsString()
     comments: string;
-
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => BindingOrderDetailsDto)
-    orderDetails: BindingOrderDetailsDto[];
-     
 }

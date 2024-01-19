@@ -1,25 +1,19 @@
-import { IsString, IsUUID, IsObject, IsNotEmpty, IsNumber, IsArray } from 'class-validator';
+import { IsString, IsUUID, IsObject, IsNotEmpty, IsNumber, IsArray, ValidateNested } from 'class-validator';
+import { BindingPriceConfig } from './service-price-details';
+import { Type } from 'class-transformer';
 
-export class OrderDetailsDto {
-    
+export class CreateServiceDto {
+
+    @IsNotEmpty()
     @IsString()
-    @IsNotEmpty()
-    pdfUrl: string;
-
-    @IsNotEmpty()
-    @IsNumber()
-    noOfCopies: number;
-
-    @IsNotEmpty()
-    @IsArray()
-    @IsNumber({}, { each: true }) // Validates each element in the array as a number
-    colorPageNos: number[];
-
-    @IsNotEmpty()
-    @IsNumber()
-
-   
-    @IsString()
-    @IsNotEmpty()
     status: string;
+
+    @IsNotEmpty()
+    @IsString()
+    type: string;
+
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => BindingPriceConfig)
+    priceConfig: BindingPriceConfig;
 }

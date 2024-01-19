@@ -21,7 +21,7 @@ export class User {
     @Column()
     password: string;
 
-    @Column({ name: "mobile_no", unique: true })
+    @Column({ name: "mobile_no", unique: true, type: 'bigint' })
     mobileNo: number;
 
     @Column({ unique: true })
@@ -50,9 +50,11 @@ export class User {
 
     // @OneToMany(type => Payment, payment => payment.user) payments: Payment[];
 
-    // @OneToMany(type => Order, order => order.user) orders: Order[];
+    @OneToMany(type => Order, order => order.user)
+    orders: Order[];
 
-    @OneToOne(() => Wallet, (wallet) => wallet.user, { onDelete: 'CASCADE' })
+
+    @OneToOne(() => Wallet, (wallet) => wallet.user, { onDelete: 'CASCADE', eager: true })
     wallet: Wallet
 
 }

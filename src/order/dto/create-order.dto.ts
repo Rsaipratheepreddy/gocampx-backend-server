@@ -1,24 +1,30 @@
 // order.dto.ts
-import { IsString, IsDateString, IsArray, ValidateNested } from 'class-validator';
+import { IsString, IsDateString, IsArray, ValidateNested, isNotEmpty, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
 import { BindingOrderDetailsDto } from './order-details.dto';
 
 export class CreateOrderDto {
+
+  @IsNotEmpty()
   @IsString()
   userId: string;
 
+  @IsNotEmpty()
   @IsString()
   serviceId: string;
 
+  @IsNotEmpty()
   @IsString()
   paymentId: string;
 
+  @IsNotEmpty()
   @IsString()
   vendorId: string;
 
   @IsString()
   orderStatus: string;
 
+  @IsNotEmpty()
   @IsDateString()
   deliveryDate: Date;
 
@@ -27,6 +33,7 @@ export class CreateOrderDto {
   @Type(() => BindingOrderDetailsDto)
   orderDetails: BindingOrderDetailsDto[];
 
+  @IsNotEmpty()
   @IsString()
   orderOtp: string;
 }
