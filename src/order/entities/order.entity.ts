@@ -3,6 +3,7 @@ import { Service } from "../../services/entities/service.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { BindingOrderDetailsDto } from "../dto/order-details.dto";
 import { BindingOrderPriceDetails } from "../dto/create-order.dto";
+import { Vendor } from "../../vendor/entities/vendor.entity";
 
 @Entity()
 export class Order {
@@ -47,4 +48,8 @@ export class Order {
     @ManyToOne(type => Service, service => service.orders, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'service_id' })
     service: Service;
+
+    @ManyToOne(type => Vendor, vendor => vendor.orders, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'vendor_id' })
+    vendor: Vendor;
 }

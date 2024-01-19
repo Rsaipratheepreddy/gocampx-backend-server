@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Order } from "../../order/entities/order.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
 @Entity()
@@ -13,13 +14,13 @@ export class Vendor {
     @Column({ name: "last_name" })
     lastName: string;
 
-    @Column({ name: "user_name" })
+    @Column({ name: "user_name", unique:true })
     userName: string;
 
     @Column()
     password: string;
 
-    @Column({ name: "mobile_no" })
+    @Column({ name: "mobile_no", type:'bigint' })
     mobileNo: number;
 
     @Column()
@@ -35,12 +36,16 @@ export class Vendor {
     shopAddress: string
 
     @Column({ type: "jsonb" })
-    services: string;
+    services: string[];
 
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date;
 
     @UpdateDateColumn({ name: "updated_at" })
     updatedAt: Date;
+
+    @OneToMany(type => Order, order => order.vendor)
+    orders: Order[];
+
 
 }
