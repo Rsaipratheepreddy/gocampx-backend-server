@@ -94,7 +94,7 @@ export class UserService {
   async loginUser(loginUserDto: LoginUserDto, email: string) {
     const user = await this.validateUser(loginUserDto.userName, loginUserDto.password, email);
 
-    if (user != null) {
+    if (user) {
       const { password, ...userWithoutPassword } = user;
       const payload = { ...userWithoutPassword };
       const access_token = await this.jwtService.signAsync(payload)
@@ -132,7 +132,6 @@ export class UserService {
       return user;
     }
     const user = await this.userRepository.findOne({ where: { userName: username } });
-    if (!user) return null;
     const passwordValid = await bcrypt.compare(password, user.password)
     if (!user) {
       throw new NotAcceptableException('could not find the user');
@@ -140,7 +139,6 @@ export class UserService {
     if (user && passwordValid) {
       return user;
     }
-    return null;
   }
 
   async sendOtp(createOtpDto: CreateOtpDto) {

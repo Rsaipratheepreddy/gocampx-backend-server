@@ -2,7 +2,6 @@ import { User } from "../../user/entities/user.entity";
 import { Service } from "../../services/entities/service.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { BindingOrderDetailsDto } from "../dto/order-details.dto";
-import { BindingOrderPriceDetails } from "../dto/create-order.dto";
 import { Vendor } from "../../vendor/entities/vendor.entity";
 
 @Entity()

@@ -2,10 +2,10 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@n
 import { CollegeService } from './college.service';
 import { CreateCollegeDto } from './dtos/create-college-dto';
 import { UpdateCollegeDto } from './dtos/update-college.dto';
-import { AuthGuard } from '../user/guards/auth.gaurd';
+import { AdminGuard } from '../user/guards/admin.gaurd';
 
 @Controller('college')
-@UseGuards(AuthGuard)
+@UseGuards(AdminGuard)
 export class CollegeController {
   constructor(private readonly collegeService: CollegeService) { }
 

@@ -25,10 +25,6 @@ export class ServicesService {
     }
   }
 
-  findAll() {
-    return `This action returns all services`;
-  }
-
   async findOne(id: string) {
     const service = await this.serviceRepository.findOneBy({ id })
     if (!service) {
@@ -54,9 +50,5 @@ export class ServicesService {
     } catch (e) {
       throw new HttpException('Error updating service', HttpStatus.BAD_REQUEST);
     }
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} service`;
   }
 }
