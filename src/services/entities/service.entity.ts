@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BindingPriceConfig } from "../dto/service-price-details";
+import { Order } from "../../order/entities/order.entity";
 
 
 @Entity()
@@ -7,14 +9,11 @@ export class Service {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ name: "order_id" })
-    orderId: string;
+    @Column({name : "type"})
+    type: string;
 
-    @Column()
-    title: string;
-
-    @Column({ type: "text" })
-    description: string;
+    @Column({ type: 'jsonb' , name: 'price-config'})
+    priceConfig: BindingPriceConfig;
 
     @Column()
     status: string;
@@ -24,5 +23,8 @@ export class Service {
 
     @UpdateDateColumn({ name: "updated_at" })
     updatedAt: Date;
+
+    @OneToMany(type => Order, order => order.service)
+    orders: Order[];
 
 }
