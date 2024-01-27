@@ -9,10 +9,16 @@ import { AuthGuard } from '../user/guards/auth.gaurd';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Post()
-  create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.create(createPaymentDto);
+  @Post("makePayment")
+  makePayment(@Body() createPaymentDto: CreatePaymentDto) {
+    return this.paymentsService.makePayment(createPaymentDto);
   }
+
+  @Post("getPaymentStatus/:id")
+  getPaymentStatus(@Param('id') merchantTransactionId: string) {
+    return this.paymentsService.getPaymentStatus(merchantTransactionId);
+  }
+
 
   @Get()
   findAll() {

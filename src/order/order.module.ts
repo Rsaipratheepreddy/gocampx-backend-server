@@ -6,10 +6,11 @@ import { User } from 'src/user/entities/user.entity';
 import { Order } from './entities/order.entity';
 import { Service } from '../services/entities/service.entity';
 import { Vendor } from '../vendor/entities/vendor.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [OrderController],
   providers: [OrderService],
-  imports: [TypeOrmModule.forFeature([Order, User, Service, Vendor])]
+  imports: [TypeOrmModule.forFeature([Order, User, Service, Vendor]), JwtModule]
 })
 export class OrderModule { }
